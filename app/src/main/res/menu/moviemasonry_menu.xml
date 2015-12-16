@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_overflow"
+        android:icon="@drawable/ic_more_vert_white_36dp"
+        app:showAsAction="ifRoom"
+        android:title="Overflow">
+
+        <menu>
+
+            <item android:id="@+id/action_refresh"
+                android:icon="@drawable/ic_sync_black_24dp"
+                app:showAsAction="ifRoom"
+                android:title="@string/menu_refresh" />
+
+            <item android:id="@+id/action_vote_count_sort"
+                android:icon="@drawable/ic_format_line_spacing_black_24dp"
+                app:showAsAction="ifRoom"
+                android:enabled="true"
+                android:title="@string/menu_vote_count_sort_text" />
+
+            <item android:id="@+id/action_popularity_sort"
+                android:icon="@drawable/ic_format_line_spacing_black_24dp"
+                app:showAsAction="ifRoom"
+                android:enabled="true"
+                android:title="@string/menu_popularity_sort_text" />
+        </menu>
+    </item>
+
+</menu>
