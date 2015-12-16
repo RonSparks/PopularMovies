@@ -5,8 +5,8 @@
     <string name="menu_popularity_sort_text">Sort by Popularity</string>
     <string name="menu_vote_count_sort_text">Sort by Rating</string>
 
-    <string name="moviedb_api_key">enter your key</string>
-    <string name="moviedb_discover_url">https://api.themoviedb.org/3/discover/movie</string>
+    <string name="moviedb_api_key">enter key here</string>
+    <string name="moviedb_base_discover_url">https://api.themoviedb.org/3/discover/movie</string>
     <string name="movie_db_base_poster_url">http://image.tmdb.org/t/p/</string>
     <string name="moviedb_discover_sort_param_field">sort_by</string>
     <string name="movie_db_api_key_field">api_key</string>

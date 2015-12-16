@@ -42,7 +42,7 @@ public class MovieOperations {
         final String API_KEY_FIELD_NAME = ctx.getString(R.string.movie_db_api_key_field);
 
 
-        String movieDbDiscoverUri = ctx.getString(R.string.moviedb_discover_uri);
+        String movieDbDiscoverUri = ctx.getString(R.string.moviedb_base_discover_url);
         String apiKey = ctx.getString(R.string.moviedb_api_key);
         String defaultSort = ctx.getString(R.string.movie_db_popularity_sort);
 

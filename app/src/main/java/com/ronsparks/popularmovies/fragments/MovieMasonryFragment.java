@@ -17,8 +17,7 @@ import android.view.ViewGroup;
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.adapters.MovieMasonryRecyclerViewAdapter;
 import com.ronsparks.popularmovies.data.MovieContent;
-import com.ronsparks.popularmovies.fragments.dummy.DummyContent;
-import com.ronsparks.popularmovies.fragments.dummy.DummyContent.DummyItem;
+import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.helpers.MovieOperations;
 
 /**
@@ -32,12 +31,12 @@ public class MovieMasonryFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    //thi is a comment.
+
     private boolean mShowPopularSortMenuItem = true;
     private int mColumnCount;
     private MovieContent mMovieContent = new MovieContent();
     private OnListFragmentInteractionListener mListener;
-
+    private RecyclerView mRecyclerView = null;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -81,13 +80,14 @@ public class MovieMasonryFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            //view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mMovieContent.ITEMS, mListener));
         }
         return view;
     }
@@ -172,8 +172,8 @@ public class MovieMasonryFragment extends Fragment {
 
         @Override
         protected void onPostExecute(MovieContent movieContent) {
-            //super.onPostExecute(movieContent);
             mMovieContent = movieContent;
+            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mMovieContent.ITEMS, mListener));
         }
 
         @Override
@@ -197,6 +197,6 @@ public class MovieMasonryFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(MovieItem item);
     }
 }

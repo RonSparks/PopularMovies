@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.ronsparks.popularmovies.R;
+import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.fragments.MovieMasonryFragment;
 import com.ronsparks.popularmovies.fragments.dummy.DummyContent;
 import com.squareup.picasso.Picasso;
@@ -19,8 +20,8 @@ public class MainActivity extends AppCompatActivity implements MovieMasonryFragm
 
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(MovieItem item) {
         TextView txtHello = (TextView)findViewById(R.id.hello_text);
-        txtHello.setText("Clicked on " + item.id.toString());
+        txtHello.setText("Clicked on " + item.movieId.toString());
     }
 }

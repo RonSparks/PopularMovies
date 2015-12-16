@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ronsparks.popularmovies.R;
+import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.fragments.MovieMasonryFragment;
 import com.ronsparks.popularmovies.fragments.dummy.DummyContent.DummyItem;
 
@@ -19,10 +20,10 @@ import java.util.List;
  */
 public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieMasonryRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<MovieItem> mValues;
     private final MovieMasonryFragment.OnListFragmentInteractionListener mListener;
 
-    public MovieMasonryRecyclerViewAdapter(List<DummyItem> items, MovieMasonryFragment.OnListFragmentInteractionListener listener) {
+    public MovieMasonryRecyclerViewAdapter(List<MovieItem> items, MovieMasonryFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +38,8 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).movieId.toString());
+        holder.mContentView.setText(mValues.get(position).title);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,13 +62,14 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public MovieItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
+            mView.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
 
         @Override
