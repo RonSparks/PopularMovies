@@ -37,7 +37,7 @@ public class MovieMasonryFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public MovieMasonryFragment() {
-        mContext = this.getContext();
+
     }
 
     // TODO: Customize parameter initialization
@@ -96,6 +96,7 @@ public class MovieMasonryFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
