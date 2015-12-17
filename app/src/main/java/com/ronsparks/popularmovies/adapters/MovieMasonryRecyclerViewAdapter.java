@@ -17,9 +17,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link MovieItem} and makes a call to the
  * specified {@link  MovieMasonryFragment.OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieMasonryRecyclerViewAdapter.ViewHolder> {
 

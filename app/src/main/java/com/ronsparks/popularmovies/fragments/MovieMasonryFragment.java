@@ -28,21 +28,20 @@ import com.ronsparks.popularmovies.helpers.MovieOperations;
  */
 public class MovieMasonryFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-
-    private boolean mShowPopularSortMenuItem = true;
-    private int mColumnCount;
-    private MovieContent mMovieContent = new MovieContent();
+    private static final String ARG_COLUMN_COUNT = "column-count";  //columns in the masonry view
+    private boolean mShowPopularSortMenuItem = true;                //bit to determine which menu option to show "sort by popularity" or "sort by rating"
+    private int mColumnCount;                                       //physical number of columns to show
+    private MovieContent mMovieContent = new MovieContent();        //container of MovieItem
     private OnListFragmentInteractionListener mListener;
-    private RecyclerView mRecyclerView = null;
-    private Context mContext = this.getContext();
+    private RecyclerView mRecyclerView = null;                      //recyclerView and adapter for the display
+    private Context mContext = this.getContext();                   //context
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public MovieMasonryFragment() {
+        mContext = this.getContext();
     }
 
     // TODO: Customize parameter initialization
@@ -65,6 +64,9 @@ public class MovieMasonryFragment extends Fragment {
 
         MovieOperations movieOps = new MovieOperations();
         String discoverUrl = movieOps.buildDiscoverMoviesUrl(getContext(), null);
+        //
+        // TODO: WHY IS CONTEXT NULL HERE?
+        //
         new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
 
         setHasOptionsMenu(true);
@@ -88,7 +90,7 @@ public class MovieMasonryFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             //view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mContext, mMovieContent.ITEMS, mListener));
+            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(context, mMovieContent.ITEMS, mListener));
         }
         return view;
     }
