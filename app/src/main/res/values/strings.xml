@@ -12,6 +12,7 @@
     <string name="movie_db_api_key_field">api_key</string>
     <string name="movie_db_popularity_sort">popularity.desc</string>
     <string name="movie_db_vote_count_sort">vote_count.desc</string>
+    <string name="movie_db_default_poster_size">w185</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

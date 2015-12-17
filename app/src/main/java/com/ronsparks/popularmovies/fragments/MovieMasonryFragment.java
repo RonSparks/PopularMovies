@@ -37,6 +37,7 @@ public class MovieMasonryFragment extends Fragment {
     private MovieContent mMovieContent = new MovieContent();
     private OnListFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView = null;
+    private Context mContext = this.getContext();
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -64,7 +65,7 @@ public class MovieMasonryFragment extends Fragment {
 
         MovieOperations movieOps = new MovieOperations();
         String discoverUrl = movieOps.buildDiscoverMoviesUrl(getContext(), null);
-        new AsyncMovieFragmentRunner().execute(discoverUrl);
+        new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
 
         setHasOptionsMenu(true);
     }
@@ -87,7 +88,7 @@ public class MovieMasonryFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             //view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mMovieContent.ITEMS, mListener));
+            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mContext, mMovieContent.ITEMS, mListener));
         }
         return view;
     }
@@ -141,7 +142,7 @@ public class MovieMasonryFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, mShowPopularSortMenuItem? ctx.getString(R.string.movie_db_popularity_sort) : ctx.getString(R.string.movie_db_vote_count_sort));
-                new AsyncMovieFragmentRunner().execute(discoverUrl);
+                new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
                 return true;
             case R.id.action_popularity_sort:
                 //change the menu option to show sort by ratings
@@ -150,7 +151,7 @@ public class MovieMasonryFragment extends Fragment {
 
                 //create new call for API and call the movieDB api
                 discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_popularity_sort));
-                new AsyncMovieFragmentRunner().execute(discoverUrl);
+                new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
                 return true;
             case R.id.action_vote_count_sort:
                 //change the menu option to show sort by popularity
@@ -159,7 +160,7 @@ public class MovieMasonryFragment extends Fragment {
 
                 //create new call for API and call the movieDB api
                 discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_vote_count_sort));
-                new AsyncMovieFragmentRunner().execute(discoverUrl);
+                new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -169,11 +170,17 @@ public class MovieMasonryFragment extends Fragment {
     private class AsyncMovieFragmentRunner extends AsyncTask<String, Void, MovieContent>{
 
         private final String LOG_TAG = AsyncMovieFragmentRunner.class.getSimpleName();
+        private Context mCtx;
+
+        public AsyncMovieFragmentRunner(Context ctx){
+            mCtx = ctx;
+        }
 
         @Override
         protected void onPostExecute(MovieContent movieContent) {
             mMovieContent = movieContent;
-            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mMovieContent.ITEMS, mListener));
+            //mRecyclerView.getAdapter().notifyDataSetChanged();
+            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mCtx, mMovieContent.ITEMS, mListener));
         }
 
         @Override

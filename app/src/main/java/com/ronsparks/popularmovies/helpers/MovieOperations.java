@@ -37,6 +37,22 @@ public class MovieOperations {
     //endregion
 
     //region Public Methods
+
+    public String buildMoviePosterUrl(Context ctx, String input){
+        final String DEFAULT_POSTER_SIZE = ctx.getString(R.string.movie_db_default_poster_size);
+        final String POSTER_BASE_URL = ctx.getString(R.string.movie_db_base_poster_url);
+
+        Uri builtUri = Uri.parse(POSTER_BASE_URL)
+                .buildUpon()
+                .appendPath(DEFAULT_POSTER_SIZE)
+                .build();
+
+        String finalUrl = builtUri.toString() + input;
+
+        return finalUrl;
+
+    }
+
     public String buildDiscoverMoviesUrl(Context ctx, String sort){
         final String SORT_FIELD_NAME = ctx.getString(R.string.moviedb_discover_sort_param_field);
         final String API_KEY_FIELD_NAME = ctx.getString(R.string.movie_db_api_key_field);

@@ -7,8 +7,6 @@ import android.widget.TextView;
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.fragments.MovieMasonryFragment;
-import com.ronsparks.popularmovies.fragments.dummy.DummyContent;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements MovieMasonryFragment.OnListFragmentInteractionListener {
 
