@@ -22,16 +22,21 @@ import java.util.List;
  */
 public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieMasonryRecyclerViewAdapter.ViewHolder> {
 
+    //region Class members
     private final List<MovieItem> mValues;
     private final MovieMasonryFragment.OnListFragmentInteractionListener mListener;
     private Context mContext;
+    //endregion
 
+    //region constructors
     public MovieMasonryRecyclerViewAdapter(Context ctx, List<MovieItem> items, MovieMasonryFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
         mContext = ctx;
     }
+    //endregion
 
+    //region public methods
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -66,7 +71,9 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
     public int getItemCount() {
         return mValues.size();
     }
+    //endregion
 
+    //region subclass ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
@@ -90,4 +97,5 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+    //endregion
 }

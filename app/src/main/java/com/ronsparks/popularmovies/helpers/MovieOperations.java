@@ -33,7 +33,9 @@ public class MovieOperations {
     //endregion
 
     //region Constructors
-        //do something
+        public MovieOperations(){
+            //empty constructor
+        }
     //endregion
 
     //region Public Methods
@@ -141,6 +143,7 @@ public class MovieOperations {
         {
             MovieContent movieContent = new MovieContent();
 
+            //TODO: would be nice to have context and get this data from strings.xml
             final String MDB_WRAPPER = "results";
             final String MDB_TITLE = "title";
             final String MDB_SYNOPSIS = "overview";

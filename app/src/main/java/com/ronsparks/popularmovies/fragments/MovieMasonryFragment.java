@@ -13,21 +13,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.adapters.MovieMasonryRecyclerViewAdapter;
 import com.ronsparks.popularmovies.data.MovieContent;
 import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.helpers.MovieOperations;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class MovieMasonryFragment extends Fragment {
 
+    //region class members
     private static final String ARG_COLUMN_COUNT = "column-count";  //columns in the masonry view
     private boolean mShowPopularSortMenuItem = true;                //bit to determine which menu option to show "sort by popularity" or "sort by rating"
     private int mColumnCount;                                       //physical number of columns to show
@@ -35,7 +29,9 @@ public class MovieMasonryFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView = null;                      //recyclerView and adapter for the display
     private Context mContext = this.getContext();                   //context
+    //endregion
 
+    //region constructors
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -53,7 +49,9 @@ public class MovieMasonryFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    //endregion
 
+    //region public methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +166,9 @@ public class MovieMasonryFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+    //endregion
 
+    //region subclass AsyncMovieFragmentRunner
     private class AsyncMovieFragmentRunner extends AsyncTask<String, Void, MovieContent>{
 
         private final String LOG_TAG = AsyncMovieFragmentRunner.class.getSimpleName();
@@ -181,7 +181,6 @@ public class MovieMasonryFragment extends Fragment {
         @Override
         protected void onPostExecute(MovieContent movieContent) {
             mMovieContent = movieContent;
-            //mRecyclerView.getAdapter().notifyDataSetChanged();
             mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mCtx, mMovieContent.ITEMS, mListener));
         }
 
@@ -193,7 +192,9 @@ public class MovieMasonryFragment extends Fragment {
             return movieContent;
         }
     }
+    //endregion
 
+    //region interface implementations
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -208,4 +209,5 @@ public class MovieMasonryFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(MovieItem item);
     }
+    //endregion
 }
