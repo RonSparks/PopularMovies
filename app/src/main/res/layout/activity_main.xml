@@ -13,7 +13,8 @@
         android:id="@+id/hello_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Hello World!"
+        android:visibility="gone"/>
 
     <fragment android:name="com.ronsparks.popularmovies.fragments.MovieMasonryFragment"
         android:id="@+id/movie_masonry_fragment"

@@ -19,21 +19,26 @@
     <ImageView
         android:id="@+id/movie_poster_image"
         android:layout_gravity="center"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:background="@drawable/imageview_border"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="fill_parent" />
 
     <TextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:visibility="gone"/>
 </LinearLayout>
 
