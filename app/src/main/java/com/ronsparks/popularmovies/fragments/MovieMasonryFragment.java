@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -183,7 +184,9 @@ public class MovieMasonryFragment extends Fragment {
         protected void onPostExecute(MovieContent movieContent) {
             mMovieContent = movieContent;
             mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mCtx, mMovieContent.ITEMS, mListener));
+            mRecyclerView.getAdapter().notifyDataSetChanged();
         }
+
 
         @Override
         protected MovieContent doInBackground(String... params) {

@@ -70,6 +70,7 @@ public class MovieOperations {
                 .appendQueryParameter(API_KEY_FIELD_NAME, apiKey)
                 .build();
 
+        Log.v(LOG_TAG, "Movie request String: " + builtUri.toString());
         return builtUri.toString();
 
     }
