@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,9 +62,6 @@ public class MovieMasonryFragment extends Fragment {
 
         MovieOperations movieOps = new MovieOperations();
         String discoverUrl = movieOps.buildDiscoverMoviesUrl(getContext(), null);
-        //
-        // TODO: WHY IS CONTEXT NULL HERE?
-        //
         new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
 
         setHasOptionsMenu(true);
