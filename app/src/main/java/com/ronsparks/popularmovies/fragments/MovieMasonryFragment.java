@@ -1,18 +1,22 @@
 package com.ronsparks.popularmovies.fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.adapters.MovieMasonryRecyclerViewAdapter;
 import com.ronsparks.popularmovies.data.MovieContent;
@@ -27,7 +31,8 @@ public class MovieMasonryFragment extends Fragment {
     private int mColumnCount;                                       //physical number of columns to show
     private OnListFragmentInteractionListener mListener;
     private MovieMasonryRecyclerViewAdapter mAdapter;
-    private  RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
+    private MovieContent mMovieContent;
     //endregion
 
     //region constructors
@@ -54,30 +59,45 @@ public class MovieMasonryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context ctx = getContext();
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        if (savedInstanceState == null) {
+            Context ctx = getContext();
+
+            if (getArguments() != null) {
+                mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            }
+
+            MovieOperations movieOps = new MovieOperations();
+            String discoverUrl = movieOps.buildDiscoverMoviesUrl(getContext(), null);
+            new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
         }
-
-        MovieOperations movieOps = new MovieOperations();
-        String discoverUrl = movieOps.buildDiscoverMoviesUrl(getContext(), null);
-        new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
 
         setHasOptionsMenu(true);
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outInstanceState) {
+        outInstanceState.putInt("value", 1);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        // create the view and get Context
         View view = inflater.inflate(R.layout.fragment_moviemasonry_list, container, false);
+        Context ctx = view.getContext();
 
-        int columnCount = getContext().getResources().getInteger(R.integer.masonry_columns);
+        //determine the screen rotation to set the columns properly
+        Display display = ((WindowManager) ctx.getSystemService(ctx.WINDOW_SERVICE)).getDefaultDisplay();
+        int orientation = display.getRotation();
+        int columnCount = orientation == 0 ? getContext().getResources().getInteger(R.integer.masonry_columns_portrait) : getContext().getResources().getInteger(R.integer.masonry_columns_landscape);
+
+        //catchall for columns
         mColumnCount = columnCount > 0 ? columnCount : 2;
 
         // Set the adapter
         if (view instanceof RecyclerView) {
-            Context ctx = view.getContext();
+
             mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(ctx));
@@ -85,7 +105,7 @@ public class MovieMasonryFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(ctx, mColumnCount));
             }
             //view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-            mAdapter = new MovieMasonryRecyclerViewAdapter(ctx, null, mListener);
+            mAdapter = new MovieMasonryRecyclerViewAdapter(ctx, savedInstanceState == null ? null : mMovieContent.ITEMS, mListener);
             mRecyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -185,6 +205,7 @@ public class MovieMasonryFragment extends Fragment {
         protected void onPostExecute(MovieContent movieContent) {
             mAdapter.updateData(movieContent.ITEMS);
             mRecyclerView.scrollToPosition(0);
+            mMovieContent = movieContent;
         }
 
 

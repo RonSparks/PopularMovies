@@ -1,3 +1,4 @@
 <resources>
-    <integer name="masonry_columns">2</integer>
+    <integer name="masonry_columns_portrait">2</integer>
+    <integer name="masonry_columns_landscape">4</integer>
 </resources>
