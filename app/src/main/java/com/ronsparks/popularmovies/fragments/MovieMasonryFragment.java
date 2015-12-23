@@ -25,10 +25,9 @@ public class MovieMasonryFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";  //columns in the masonry view
     private boolean mShowPopularSortMenuItem = true;                //bit to determine which menu option to show "sort by popularity" or "sort by rating"
     private int mColumnCount;                                       //physical number of columns to show
-    private MovieContent mMovieContent = new MovieContent();        //container of MovieItem
     private OnListFragmentInteractionListener mListener;
-    private RecyclerView mRecyclerView = null;                      //recyclerView and adapter for the display
-    private Context mContext = this.getContext();                   //context
+    private MovieMasonryRecyclerViewAdapter mAdapter;
+    private  RecyclerView mRecyclerView;
     //endregion
 
     //region constructors
@@ -55,6 +54,7 @@ public class MovieMasonryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context ctx = getContext();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -62,14 +62,14 @@ public class MovieMasonryFragment extends Fragment {
 
         MovieOperations movieOps = new MovieOperations();
         String discoverUrl = movieOps.buildDiscoverMoviesUrl(getContext(), null);
-        new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
+        new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
 
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_moviemasonry_list, container, false);
 
         int columnCount = getContext().getResources().getInteger(R.integer.masonry_columns);
@@ -77,15 +77,16 @@ public class MovieMasonryFragment extends Fragment {
 
         // Set the adapter
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
+            Context ctx = view.getContext();
             mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(ctx));
             } else {
-                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(ctx, mColumnCount));
             }
             //view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(context, mMovieContent.ITEMS, mListener));
+            mAdapter = new MovieMasonryRecyclerViewAdapter(ctx, null, mListener);
+            mRecyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -93,7 +94,6 @@ public class MovieMasonryFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = context;
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
@@ -118,8 +118,6 @@ public class MovieMasonryFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
 
-        boolean blnTest = mShowPopularSortMenuItem;
-
         if(mShowPopularSortMenuItem) {
             menu.findItem(R.id.action_popularity_sort).setVisible(!mShowPopularSortMenuItem);
             menu.findItem(R.id.action_vote_count_sort).setVisible(mShowPopularSortMenuItem);
@@ -140,7 +138,8 @@ public class MovieMasonryFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, mShowPopularSortMenuItem? ctx.getString(R.string.movie_db_popularity_sort) : ctx.getString(R.string.movie_db_vote_count_sort));
-                new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
+                mAdapter.clear();
+                new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
                 return true;
             case R.id.action_popularity_sort:
                 //change the menu option to show sort by ratings
@@ -149,7 +148,8 @@ public class MovieMasonryFragment extends Fragment {
 
                 //create new call for API and call the movieDB api
                 discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_popularity_sort));
-                new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
+                mAdapter.clear();
+                new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
                 return true;
             case R.id.action_vote_count_sort:
                 //change the menu option to show sort by popularity
@@ -158,7 +158,8 @@ public class MovieMasonryFragment extends Fragment {
 
                 //create new call for API and call the movieDB api
                 discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_vote_count_sort));
-                new AsyncMovieFragmentRunner(mContext).execute(discoverUrl);
+                mAdapter.clear();
+                new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -169,18 +170,21 @@ public class MovieMasonryFragment extends Fragment {
     //region subclass AsyncMovieFragmentRunner
     private class AsyncMovieFragmentRunner extends AsyncTask<String, Void, MovieContent>{
 
-        private final String LOG_TAG = AsyncMovieFragmentRunner.class.getSimpleName();
+        //region Member variables
         private Context mCtx;
+        //endregion
 
+        //region Constructors
         public AsyncMovieFragmentRunner(Context ctx){
             mCtx = ctx;
         }
+        //endregion
 
+        //region Protected methods
         @Override
         protected void onPostExecute(MovieContent movieContent) {
-            mMovieContent = movieContent;
-            mRecyclerView.setAdapter(new MovieMasonryRecyclerViewAdapter(mCtx, mMovieContent.ITEMS, mListener));
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+            mAdapter.updateData(movieContent.ITEMS);
+            mRecyclerView.scrollToPosition(0);
         }
 
 
@@ -191,6 +195,7 @@ public class MovieMasonryFragment extends Fragment {
 
             return movieContent;
         }
+        //endregion
     }
     //endregion
 

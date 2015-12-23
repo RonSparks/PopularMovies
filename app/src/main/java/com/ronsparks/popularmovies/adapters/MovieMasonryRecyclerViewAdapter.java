@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.fragments.MovieMasonryFragment;
@@ -23,7 +22,7 @@ import java.util.List;
 public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieMasonryRecyclerViewAdapter.ViewHolder> {
 
     //region Class members
-    private final List<MovieItem> mValues;
+    private List<MovieItem> mValues;
     private final MovieMasonryFragment.OnListFragmentInteractionListener mListener;
     private Context mContext;
     //endregion
@@ -37,6 +36,16 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
     //endregion
 
     //region public methods
+
+    public void clear(){
+        if (mValues!= null) mValues.clear();
+    }
+
+    public void updateData (List<MovieItem> movies){
+        mValues = movies;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -69,7 +78,11 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues != null) {
+            return mValues.size();
+        }else{
+            return 0;
+        }
     }
     //endregion
 

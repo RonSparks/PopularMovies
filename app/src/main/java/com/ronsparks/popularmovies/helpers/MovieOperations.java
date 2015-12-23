@@ -77,7 +77,7 @@ public class MovieOperations {
 
     public MovieContent fetchPopularMovies(String inputUrl) {
 
-        String result = null;
+        String result;
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
