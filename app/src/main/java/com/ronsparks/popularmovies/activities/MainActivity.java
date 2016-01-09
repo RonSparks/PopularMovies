@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.data.MovieItem;
-import com.ronsparks.popularmovies.fragments.MovieDetailActivityFragment;
 import com.ronsparks.popularmovies.fragments.MovieMasonryFragment;
 
-public class MainActivity extends AppCompatActivity implements MovieMasonryFragment.OnListFragmentInteractionListener, MovieDetailActivityFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MovieMasonryFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +28,4 @@ public class MainActivity extends AppCompatActivity implements MovieMasonryFragm
         startActivity(intent);
     }
 
-    @Override
-    public void onMovieDetailFragmentInteraction(MovieItem movieItem){
-        //do something
-    }
 }
