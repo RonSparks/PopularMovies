@@ -2,19 +2,30 @@
     <string name="app_name">Popular Movies</string>
 
     <string name="menu_refresh">Refresh</string>
-    <string name="menu_popularity_sort_text">Sort by Popularity</string>
-    <string name="menu_vote_count_sort_text">Sort by Rating</string>
+    <string name="menu_popularity_sort_text">Most Popular Movies</string>
+    <string name="menu_vote_count_sort_text">Highest Rated Movies</string>
 
-    <string name="moviedb_api_key">enter key here</string>
+    <string name="moviedb_api_key">ENTER API KEY HERE</string>
     <string name="moviedb_base_discover_url">https://api.themoviedb.org/3/discover/movie</string>
+    <string name="moviedb_base_detail_url">https://api.themoviedb.org/3/movie</string>
     <string name="movie_db_base_poster_url">http://image.tmdb.org/t/p/</string>
     <string name="moviedb_discover_sort_param_field">sort_by</string>
     <string name="movie_db_api_key_field">api_key</string>
     <string name="movie_db_popularity_sort">popularity.desc</string>
     <string name="movie_db_vote_count_sort">vote_count.desc</string>
     <string name="movie_db_default_poster_size">w185</string>
+    <string name="movie_db_high_res_poster_size">w500</string>
+    <string name="bundle_key_movie_id">bundle_movie_id</string>
+
+    <string name="synopsis_header_title">Synopsis</string>
+    <string name="movie_info_title">Movie Details</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_movie_detail">MovieDetail</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="dummy_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed scelerisque accumsan augue, quis fermentum dolor viverra nec. Nulla facilisi. Praesent tempor turpis magna, at euismod libero euismod ac. Ut ullamcorper fermentum vehicula. Pellentesque ac auctor enim. Sed elementum tincidunt scelerisque. Nullam dapibus vel dolor eget convallis. Sed faucibus turpis vitae leo cursus eleifend. Morbi tincidunt elit non ex consectetur, vulputate vestibulum turpis maximus. Suspendisse ornare ex sit amet massa condimentum, sit amet imperdiet tellus consectetur. Duis eget accumsan lacus. Cras maximus ornare euismod. Vestibulum scelerisque, nunc at ornare blandit, tellus nulla dictum augue, a convallis nisl arcu a neque. Sed placerat pellentesque luctus.</string>
 </resources>
 
