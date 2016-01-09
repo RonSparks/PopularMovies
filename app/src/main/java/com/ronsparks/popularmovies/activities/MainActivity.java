@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity implements MovieMasonryFragm
         TextView txtHello = (TextView)findViewById(R.id.hello_text);
         txtHello.setText("Clicked on " + item.movieId.toString());
 
+        Bundle bundle = new Bundle();
+        bundle.putLong(getString(R.string.bundle_key_movie_id), item.movieId);
         Intent intent = new Intent (this, MovieDetailActivity.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

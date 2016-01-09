@@ -40,6 +40,23 @@ public class MovieOperations {
 
     //region Public Methods
 
+    public String buildMovieDetailUrl(Context ctx, Long movieId){
+        final String API_KEY_FIELD_NAME = ctx.getString(R.string.movie_db_api_key_field);
+
+        String movieDbDetailUri = ctx.getString(R.string.moviedb_base_detail_url) + "/" + movieId.toString();
+        String apiKey = ctx.getString(R.string.moviedb_api_key);
+
+
+        Uri builtUri = Uri.parse(movieDbDetailUri)
+                .buildUpon()
+                .appendQueryParameter(API_KEY_FIELD_NAME, apiKey)
+                .build();
+
+        Log.v(LOG_TAG, "Movie Detail String: " + builtUri.toString());
+
+        return builtUri.toString();
+    }
+
     public String buildMoviePosterUrl(Context ctx, String input){
         final String DEFAULT_POSTER_SIZE = ctx.getString(R.string.movie_db_default_poster_size);
         final String POSTER_BASE_URL = ctx.getString(R.string.movie_db_base_poster_url);
@@ -73,6 +90,64 @@ public class MovieOperations {
         Log.v(LOG_TAG, "Movie request String: " + builtUri.toString());
         return builtUri.toString();
 
+    }
+
+    public MovieItem fetchMovieDetail(String inputUrl){
+        String result;
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+
+        try {
+            URL url = new URL(inputUrl);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+
+            result = buffer.toString();
+            Log.v(LOG_TAG, "Movie JSON String: " + result);
+
+            MovieItem movieItem = MapMovieDetailJsontoMovieItem(result);
+            return movieItem;
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error ", e);
+            return null;
+
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e("fetchUrl", "Error closing stream", e);
+                }
+            }
+        }
     }
 
     public MovieContent fetchPopularMovies(String inputUrl) {
@@ -138,6 +213,102 @@ public class MovieOperations {
     //endregion
 
     //region Private Methods
+
+    private MovieItem MapMovieDetailJsontoMovieItem(String input){
+
+        try
+        {
+            MovieItem movieItem = new MovieItem();
+
+            //TODO: would be nice to have context and get this data from strings.xml
+            final String MDB_WRAPPER = "results";
+            final String MDB_TITLE = "title";
+            final String MDB_SYNOPSIS = "overview";
+            final String MDB_RELEASE_DATE = "release_date";
+            final String MDB_IS_ADULT = "adult";
+            final String MDB_POPULARITY = "popularity";
+            final String MDB_POSTER_PATH = "poster_path";
+            final String MDB_VOTE_COUNT = "vote_count";
+            final String MDB_VOTE_AVERAGE = "vote_average";
+            final String MDB_ID = "id";
+
+            final String MDB_BACKDROP_PATH = "backdrop_path";
+            final String MDB_BUDGET = "budget";
+            final String MDB_GENRES = "genres";
+            final String MDB_HOMEPAGE_URL = "homepage";
+            final String IMDB_ID = "imdb_id";
+            final String MDB_ORIGINAL_LANGUAGE = "original_language";
+            final String MDB_PRODUCTION_COMPANIES =  "production_companies";
+            final String MDB_PRODUCTION_COUNTRIES = "production_countries";
+            final String MDB_RUNTIME_MINUTES = "runtime";
+            final String MDB_REVENUE_DOLLARS = "revenue";
+            final String MDB_TAGLINE = "tagline";
+            final String MDB_GENRE_NAME = "name";
+            final String MDB_PRODUCTION_COUNTRIES_NAME = "name";
+            final String MDB_PRODUCTION_COMPANIES_NAME = "name";
+
+
+            JSONObject movieJson = new JSONObject(input);
+            movieItem.title = movieJson.getString(MDB_TITLE);
+            movieItem.synopsis = movieJson.getString(MDB_SYNOPSIS);
+            movieItem.releaseDate = movieJson.getString(MDB_RELEASE_DATE);
+            movieItem.isAdult = movieJson.getString(MDB_IS_ADULT) != "false";
+            movieItem.popularity = movieJson.getDouble(MDB_POPULARITY);
+            movieItem.posterPath = movieJson.getString(MDB_POSTER_PATH);
+            movieItem.voteCount = movieJson.getInt(MDB_VOTE_COUNT);
+            movieItem.voteAverage = movieJson.getLong(MDB_VOTE_AVERAGE);
+            movieItem.movieId = movieJson.getLong(MDB_ID);
+            movieItem.backdropPath = movieJson.getString(MDB_BACKDROP_PATH);
+            movieItem.budget = movieJson.getLong(MDB_BUDGET);
+            movieItem.homepageUrl = movieJson.getString(MDB_HOMEPAGE_URL);
+            movieItem.ImdbId = movieJson.getString(IMDB_ID);
+            movieItem.originalLanguage = movieJson.getString(MDB_ORIGINAL_LANGUAGE);
+            movieItem.runtimeMinutes = movieJson.getInt(MDB_RUNTIME_MINUTES);
+            movieItem.revenue = movieJson.getDouble(MDB_REVENUE_DOLLARS);
+            movieItem.tagline = movieJson.getString(MDB_TAGLINE);
+
+            JSONArray genreArray = movieJson.getJSONArray(MDB_GENRES);
+            String [] genres = new String[genreArray.length()];
+
+            for(int i = 0; i < genreArray.length(); i++) {
+                JSONObject singleGenre = genreArray.getJSONObject(i);
+                genres[i] = singleGenre.getString(MDB_GENRE_NAME);
+            }
+
+            movieItem.genres = genres;
+
+            JSONArray countriesArray = movieJson.getJSONArray(MDB_PRODUCTION_COUNTRIES);
+            String [] productionCountries = new String[countriesArray.length()];
+
+            for(int i = 0; i < countriesArray.length(); i++) {
+                JSONObject singleCountry = countriesArray.getJSONObject(i);
+                productionCountries[i] = singleCountry.getString(MDB_PRODUCTION_COUNTRIES_NAME);
+            }
+
+            movieItem.productionCountries = productionCountries;
+
+            JSONArray companiesArray = movieJson.getJSONArray(MDB_PRODUCTION_COMPANIES);
+            String [] productionCompanies = new String[companiesArray.length()];
+
+            for(int i = 0; i < companiesArray.length(); i++) {
+                JSONObject singleCompany = companiesArray.getJSONObject(i);
+                productionCompanies[i] = singleCompany.getString(MDB_PRODUCTION_COMPANIES_NAME);
+            }
+
+            movieItem.productionCompanies = productionCompanies;
+
+            return movieItem;
+        }
+        catch (JSONException je)
+        {
+            Log.e(LOG_TAG, "Error", je);
+            je.printStackTrace();
+        }
+
+        return null;
+
+    }
+
     private MovieContent MapMovieJsonToMovieItems(String input){
 
         try
@@ -155,6 +326,7 @@ public class MovieOperations {
             final String MDB_VOTE_COUNT = "vote_count";
             final String MDB_VOTE_AVERAGE = "vote_average";
             final String MDB_ID = "id";
+
 
             JSONObject movieJson = new JSONObject(input);
             JSONArray movieArray = movieJson.getJSONArray(MDB_WRAPPER);
