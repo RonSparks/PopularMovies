@@ -13,6 +13,10 @@ import com.ronsparks.popularmovies.helpers.MovieOperations;
 import com.ronsparks.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
+//
+// layout for this activity inspired by chrisbanes/cheesesquare app.
+// https://github.com/chrisbanes/cheesesquare
+//
 public class MovieDetailActivity extends AppCompatActivity {
 
     //#region Member Variables
