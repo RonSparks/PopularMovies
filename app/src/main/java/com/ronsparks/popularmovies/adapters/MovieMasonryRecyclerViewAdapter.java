@@ -61,7 +61,7 @@ public class MovieMasonryRecyclerViewAdapter extends RecyclerView.Adapter<MovieM
 
         MovieOperations movieOps = new MovieOperations();
         String posterName = mValues.get(position).posterPath;
-        posterName = movieOps.buildMoviePosterUrl(mContext, posterName);
+        posterName = movieOps.buildMoviePosterUrl(mContext, posterName, null);
         Picasso.with(mContext).load(posterName).into(holder.mPosterImage);
 
                 holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -59,25 +59,11 @@ public class MovieOperations {
 
     public String buildMoviePosterUrl(Context ctx, String input, String size){
         final String POSTER_BASE_URL = ctx.getString(R.string.movie_db_base_poster_url);
+        size = size==null?ctx.getString(R.string.movie_db_default_poster_size):size;
 
         Uri builtUri = Uri.parse(POSTER_BASE_URL)
                 .buildUpon()
                 .appendPath(size)
-                .build();
-
-        String finalUrl = builtUri.toString() + input;
-
-        return finalUrl;
-
-    }
-
-    public String buildMoviePosterUrl(Context ctx, String input){
-        final String DEFAULT_POSTER_SIZE = ctx.getString(R.string.movie_db_default_poster_size);
-        final String POSTER_BASE_URL = ctx.getString(R.string.movie_db_base_poster_url);
-
-        Uri builtUri = Uri.parse(POSTER_BASE_URL)
-                .buildUpon()
-                .appendPath(DEFAULT_POSTER_SIZE)
                 .build();
 
         String finalUrl = builtUri.toString() + input;
@@ -270,7 +256,7 @@ public class MovieOperations {
             movieItem.popularity = movieJson.getDouble(MDB_POPULARITY);
             movieItem.posterPath = movieJson.getString(MDB_POSTER_PATH);
             movieItem.voteCount = movieJson.getInt(MDB_VOTE_COUNT);
-            movieItem.voteAverage = movieJson.getLong(MDB_VOTE_AVERAGE);
+            movieItem.voteAverage = movieJson.getDouble(MDB_VOTE_AVERAGE);
             movieItem.movieId = movieJson.getLong(MDB_ID);
             movieItem.backdropPath = movieJson.getString(MDB_BACKDROP_PATH);
             movieItem.budget = movieJson.getLong(MDB_BUDGET);
@@ -357,7 +343,7 @@ public class MovieOperations {
                 movie.posterPath = singleMovie.getString(MDB_POSTER_PATH);
                 movie.voteCount = singleMovie.getInt(MDB_VOTE_COUNT);
                 movie.movieId = singleMovie.getLong(MDB_ID);
-                movie.voteAverage = singleMovie.getLong(MDB_VOTE_AVERAGE);
+                movie.voteAverage = singleMovie.getDouble(MDB_VOTE_AVERAGE);
 
                 movieContent.AddMovie(movie);
             }

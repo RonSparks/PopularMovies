@@ -91,13 +91,6 @@
                     android:padding="5dp"
                     />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/movie_poster"
-                    android:id="@+id/movie_release_date"
-                    android:text="release date" />
-
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -147,10 +140,44 @@
                     android:text="@string/movie_info_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.4">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/movie_release_date"
+
+                        android:paddingRight="10dp"
+                        android:text="release date" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.4">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/movie_vote_average"
+                        android:paddingRight="10dp"
+                        android:text="vote average" />
+
+
+                </RelativeLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="movie information goes here" />
+                    android:id="@+id/movie_total_votes"
+                    android:layout_weight="0.3"
+                    android:paddingRight="10dp"
+                    android:text="votes" />
 
             </LinearLayout>
 
@@ -163,37 +190,10 @@
             android:layout_marginLeft="@dimen/card_margin"
             android:layout_marginRight="@dimen/card_margin">
 
-            <LinearLayout
-                style="@style/Widget.CardContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Related"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dummy_text" />
-
-            </LinearLayout>
-
         </android.support.v7.widget.CardView>
 
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
-
-<android.support.design.widget.FloatingActionButton
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    app:layout_anchor="@id/appbar"
-    app:layout_anchorGravity="bottom|right|end"
-    android:src="@android:drawable/ic_dialog_email"
-    android:layout_margin="@dimen/fab_margin"
-    android:clickable="true"/>
 
 </tools:android.support.design.widget.CoordinatorLayout>

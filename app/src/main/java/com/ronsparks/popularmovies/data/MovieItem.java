@@ -26,6 +26,6 @@ public class MovieItem {
     public Long movieId;
     public Double popularity;
     public Integer voteCount;
-    public Long voteAverage;
+    public Double voteAverage;
     //endregion
 }
