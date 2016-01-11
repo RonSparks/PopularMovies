@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.ronsparks.popularmovies.R;
 import com.ronsparks.popularmovies.adapters.MovieMasonryRecyclerViewAdapter;
@@ -156,29 +157,47 @@ public class MovieMasonryFragment extends Fragment {
         // handle item selection
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, mShowPopularSortMenuItem? ctx.getString(R.string.movie_db_popularity_sort) : ctx.getString(R.string.movie_db_vote_count_sort));
-                mAdapter.clear();
-                new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
+                if (movieOps.haveNetworkConnection(ctx)) {
+                    discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, mShowPopularSortMenuItem ? ctx.getString(R.string.movie_db_popularity_sort) : ctx.getString(R.string.movie_db_vote_count_sort));
+                    mAdapter.clear();
+                    new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
+                }
+                else
+                {
+                    Toast.makeText(ctx.getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.action_popularity_sort:
                 //change the menu option to show sort by ratings
-                mShowPopularSortMenuItem = !mShowPopularSortMenuItem;
-                getActivity().invalidateOptionsMenu();
+                if (movieOps.haveNetworkConnection(ctx)) {
+                    mShowPopularSortMenuItem = !mShowPopularSortMenuItem;
+                    getActivity().invalidateOptionsMenu();
 
-                //create new call for API and call the movieDB api
-                discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_popularity_sort));
-                mAdapter.clear();
-                new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
+                    //create new call for API and call the movieDB api
+                    discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_popularity_sort));
+                    mAdapter.clear();
+                    new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
+                }
+                else
+                {
+                    Toast.makeText(ctx.getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.action_vote_count_sort:
                 //change the menu option to show sort by popularity
-                mShowPopularSortMenuItem = !mShowPopularSortMenuItem;
-                getActivity().invalidateOptionsMenu();
+                if (movieOps.haveNetworkConnection(ctx)) {
+                    mShowPopularSortMenuItem = !mShowPopularSortMenuItem;
+                    getActivity().invalidateOptionsMenu();
 
-                //create new call for API and call the movieDB api
-                discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_vote_count_sort));
-                mAdapter.clear();
-                new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
+                    //create new call for API and call the movieDB api
+                    discoverUrl = movieOps.buildDiscoverMoviesUrl(ctx, ctx.getString(R.string.movie_db_vote_count_sort));
+                    mAdapter.clear();
+                    new AsyncMovieFragmentRunner(ctx).execute(discoverUrl);
+                }
+                else
+                {
+                    Toast.makeText(ctx.getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

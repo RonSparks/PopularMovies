@@ -1,6 +1,8 @@
 package com.ronsparks.popularmovies.activities;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -8,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.ronsparks.popularmovies.data.MovieItem;
 import com.ronsparks.popularmovies.helpers.MovieOperations;
 import com.ronsparks.popularmovies.R;
@@ -42,8 +46,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (extras != null) {
             mMovieId = extras.getLong(getString(R.string.bundle_key_movie_id));
             MovieOperations movieOps = new MovieOperations();
-            String discoverUrl = movieOps.buildMovieDetailUrl(this, mMovieId);
-            new AsyncMovieDetailRunner(this).execute(discoverUrl);
+
+            if (movieOps.haveNetworkConnection(this)) {
+                String discoverUrl = movieOps.buildMovieDetailUrl(this, mMovieId);
+                new AsyncMovieDetailRunner(this).execute(discoverUrl);
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+            }
         }
 
         if (savedInstanceState != null){
@@ -98,6 +109,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             return mMovieItem;
         }
         //endregion
+
+
     }
     //endregion
 
